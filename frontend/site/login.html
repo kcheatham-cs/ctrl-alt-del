@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - InstaRewind</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+    }
+    .login-container {
+      width: 100%;
+      max-width: 350px;
+      padding: 30px;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .logo { font-size: 1.8rem; font-weight: 600; color: #6a0dad; margin-bottom: 10px; }
+    .subtitle { font-size: 1.1rem; color: #777; margin-bottom: 20px; }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    input:focus { outline: none; border-color: #6a0dad; }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #6a0dad;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 5px;
+    }
+    button:hover { background: #5a009c; }
+    button:disabled { background: #aaa; cursor: not-allowed; }
+
+    .error { color: red; font-size: 0.85rem; margin-top: 10px; display: none; }
+    .hint { font-size: 0.8rem; color: #999; margin-top: 16px; }
+  </style>
+</head>
+<body>
+<div class="login-container">
+  <div class="logo">InstaRewind</div>
+  <div class="subtitle">Login to continue</div>
+
+  <form onsubmit="login(event)">
+    <input type="text" id="username" placeholder="Username" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button type="submit" id="submitBtn">Login</button>
+  </form>
+
+  <div class="error" id="errorMsg">Invalid username or password.</div>
+  <div class="hint">Demo: username <strong>admin</strong> / password <strong>1234</strong></div>
+</div>
+
+<script>
+  async function login(e) {
+    e.preventDefault();
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const btn      = document.getElementById('submitBtn');
+    const errorMsg = document.getElementById('errorMsg');
+
+    errorMsg.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = 'Logging in...';
+
+    try {
+      const res  = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        sessionStorage.setItem('user', JSON.stringify(data.user));
+        window.location.href = '/dashboard.html';
+      } else {
+        errorMsg.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Login';
+      }
+    } catch (err) {
+      errorMsg.textContent = 'Could not reach server. Is the backend running?';
+      errorMsg.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Login';
+    }
+  }
+</script>
+</body>
+</html>
