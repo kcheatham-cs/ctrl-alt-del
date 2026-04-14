@@ -59,7 +59,15 @@
       align-items: center;
       box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     }
-    .user-bar .logo { font-size: 1.2rem; font-weight: bold; color: #6a0dad; }
+    .user-bar .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #6a0dad;
+    }
+    .user-bar .logo img { width: 30px; height: 30px; border-radius: 7px; }
     .user-bar a { color: #6a0dad; font-size: 0.9rem; text-decoration: none; }
     #loading { color: #888; margin-top: 60px; }
   </style>
@@ -67,7 +75,10 @@
 <body>
 
 <div class="user-bar">
-  <span class="logo">InstaRewind</span>
+  <span class="logo">
+    <img src="/assets/icon/3380app.png" alt="InstaRewind icon">
+    InstaRewind
+  </span>
   <span id="welcomeMsg"></span>
   <a href="/site/login.html" onclick="sessionStorage.clear()">Logout</a>
 </div>

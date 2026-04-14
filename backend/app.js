@@ -9,20 +9,15 @@ const notificationService = require('./services/NotificationService');
 const rewindService = require('./services/RewindService');
 
 app.use(express.json());
-
-// Serve frontend files statically from the frontend/ folder
 app.use(express.static(path.join(__dirname, '../frontend')));
+app.use('/assets', express.static(path.join(__dirname, '../assets')));
 
-// Boot sequence: load users → generate activity → seed notifications → init rewind
 userService.loadUsers();
 activityService.generate(userService.users);
 notificationService.load(activityService);
 rewindService.init(activityService, userService);
 
-// API routes
 app.use('/api', routes);
-
-// Root redirect → login page
 app.get('/', (req, res) => {
   res.redirect('/site/login.html');
 });

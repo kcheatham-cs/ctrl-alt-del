@@ -1,19 +1,14 @@
-// JS port of the Activity system (ActivityEvent.java + ActivityType.java).
-// Generates simulated engagement events at startup and stores them in memory.
-// Other services (NotificationService, RewindService) consume this data.
 
 class ActivityService {
   constructor() {
     this.events = []; // Array of plain event objects
   }
 
-  // Called once at startup. Populates events and back-fills stats onto User objects.
   generate(userMap) {
     const users = Array.from(userMap.values());
     const engagementTypes = ['LIKE_POST', 'LIKE_STORY', 'COMMENT', 'VIEW_STORY'];
 
     users.forEach(actor => {
-      // Each user performs 5–25 random engagement actions against other users
       const count = 5 + Math.floor(Math.random() * 20);
       for (let i = 0; i < count; i++) {
         const target = users[Math.floor(Math.random() * users.length)];
@@ -29,7 +24,6 @@ class ActivityService {
         });
       }
 
-      // Simulate unfollows: ~20% chance a user unfollows each person they currently follow
       Array.from(actor.following).forEach(targetId => {
         if (Math.random() < 0.2) {
           const target = userMap.get(targetId);
@@ -47,8 +41,6 @@ class ActivityService {
       });
     });
 
-    // Randomly boost follower counts so every user starts with a realistic number.
-    // Each user gains between 10 and 60 additional random followers.
     users.forEach(actor => {
       const newFollows = 10 + Math.floor(Math.random() * 51);
       for (let i = 0; i < newFollows; i++) {
@@ -60,7 +52,6 @@ class ActivityService {
       }
     });
 
-    // Back-fill engagement counters and snapshot follower count onto User model objects
     users.forEach(user => {
       user.postLikes     = this.events.filter(e => e.toUserId === user.id && e.type === 'LIKE_POST').length;
       user.storyLikes    = this.events.filter(e => e.toUserId === user.id && e.type === 'LIKE_STORY').length;
@@ -71,8 +62,6 @@ class ActivityService {
     console.log(`Generated ${this.events.length} activity events`);
   }
 
-  // Adds a single new event at runtime (used by the /simulate endpoint).
-  // Mutates the User objects in-place so toJSON() reflects the change immediately.
   addEvent(fromUser, toUser, type) {
     const event = {
       fromUserId: fromUser.id,
@@ -97,12 +86,10 @@ class ActivityService {
     return event;
   }
 
-  // Returns all events where the given user is the target (received events).
   getEventsForUser(userId) {
     return this.events.filter(e => e.toUserId === userId);
   }
 
-  // Returns only UNFOLLOW events targeting a user.
   getUnfollowsForUser(userId) {
     return this.events.filter(e => e.toUserId === userId && e.type === 'UNFOLLOW');
   }

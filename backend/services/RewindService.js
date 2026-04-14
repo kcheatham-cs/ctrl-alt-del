@@ -1,20 +1,14 @@
-// JS port of Kiersten's Rewind.java / RewindSummary.java (Strategy pattern).
-// Uses ActivityService as the event source and UserService for user lookups.
-// Mirrors the four rank strategies: LIKE_POST, LIKE_STORY, COMMENT, VIEW_STORY.
-
 class RewindService {
   constructor() {
     this.activityService = null;
     this.userService = null;
   }
 
-  // Must be called after both services are ready.
   init(activityService, userService) {
     this.activityService = activityService;
     this.userService = userService;
   }
 
-  // Shared ranking helper — mirrors BaseRankStrategy.getTopN().
   _rankByType(userId, type, topN) {
     const events = this.activityService
       .getEventsForUser(userId)
@@ -34,16 +28,11 @@ class RewindService {
       });
   }
 
-  // Mirrors PostLikesRankStrategy
   getTopPostLikers(userId, topN = 8)    { return this._rankByType(userId, 'LIKE_POST',   topN); }
-  // Mirrors StoryLikesRankStrategy
   getTopStoryLikers(userId, topN = 8)   { return this._rankByType(userId, 'LIKE_STORY',  topN); }
-  // Mirrors CommentsRankStrategy
   getTopCommenters(userId, topN = 8)    { return this._rankByType(userId, 'COMMENT',     topN); }
-  // Mirrors StoryViewsRankStrategy
   getTopStoryViewers(userId, topN = 8)  { return this._rankByType(userId, 'VIEW_STORY',  topN); }
 
-  // Mirrors Rewind.generateRewind() → returns a RewindSummary-shaped object.
   generateRewind(userId) {
     const user = this.userService.getUserById(userId);
     if (!user) return null;

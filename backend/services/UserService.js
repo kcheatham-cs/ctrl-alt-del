@@ -15,13 +15,11 @@ class UserService {
 
     const rawData = JSON.parse(fs.readFileSync(filePath));
 
-    // Create user objects
     rawData.forEach(u => {
       const user = new User(u.id, u.username, u.email);
       this.users.set(user.id, user);
     });
 
-    // Connect relationships
     rawData.forEach(u => {
       const user = this.users.get(u.id);
 

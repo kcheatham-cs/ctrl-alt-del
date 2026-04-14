@@ -7,7 +7,6 @@ const activityService    = require('../services/ActivityService');
 const notificationService = require('../services/NotificationService');
 const rewindService      = require('../services/RewindService');
 
-// Allow frontend pages on any origin to call the API
 router.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
@@ -16,7 +15,6 @@ router.use((req, res, next) => {
 
 const searchService = new SearchService(userService);
 
-// ── Health check ───────────────────────────────────────────────────────────
 router.get('/status', (req, res) => {
   res.json({
     message: 'Backend is working',
@@ -25,7 +23,6 @@ router.get('/status', (req, res) => {
   });
 });
 
-// ── Users ──────────────────────────────────────────────────────────────────
 router.get('/users', (req, res) => {
   res.json(userService.getAllUsers());
 });
@@ -36,17 +33,13 @@ router.get('/users/:id', (req, res) => {
   res.json(user);
 });
 
-// ── Login ──────────────────────────────────────────────────────────────────
-
-// GET login by ID — kept for backwards compatibility
+//Login
 router.get('/login/:id', (req, res) => {
   const user = userService.login(parseInt(req.params.id));
   if (!user) return res.status(404).json({ error: 'User not found' });
   res.json(user);
 });
 
-// POST login with username + password (used by login.html)
-// Demo credentials: admin / 1234  →  returns user #1
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
   if (username === 'admin' && password === '1234') {
@@ -56,14 +49,13 @@ router.post('/login', (req, res) => {
   res.status(401).json({ success: false, error: 'Invalid credentials' });
 });
 
-// ── Search ─────────────────────────────────────────────────────────────────
+//Search
 router.get('/search', (req, res) => {
   const result = searchService.search(req.query.q);
   res.json(result);
 });
 
-// ── Dashboard ──────────────────────────────────────────────────────────────
-// Returns user stats + recent unfollow notifications for the dashboard page.
+//Dashboard
 router.get('/dashboard/:id', (req, res) => {
   const user = userService.getUserById(parseInt(req.params.id));
   if (!user) return res.status(404).json({ error: 'User not found' });
@@ -76,8 +68,7 @@ router.get('/dashboard/:id', (req, res) => {
   });
 });
 
-// ── Notifications ──────────────────────────────────────────────────────────
-// Returns all unfollow notifications for a user (newest first).
+//Notifications
 router.get('/notifications/:id', (req, res) => {
   const userId = parseInt(req.params.id);
   const user = userService.getUserById(userId);
@@ -85,8 +76,7 @@ router.get('/notifications/:id', (req, res) => {
   res.json(notificationService.getNotifications(userId));
 });
 
-// ── Rewind ─────────────────────────────────────────────────────────────────
-// Returns the full RewindSummary for a user.
+//Rewind
 router.get('/rewind/:id', (req, res) => {
   const userId = parseInt(req.params.id);
   const summary = rewindService.generateRewind(userId);
@@ -94,9 +84,7 @@ router.get('/rewind/:id', (req, res) => {
   res.json(summary);
 });
 
-// ── Simulate ───────────────────────────────────────────────────────────────
-// Picks a random event type and a random actor, applies it to the target user,
-// and returns updated stats so the dashboard reflects the change immediately.
+//Simulation
 router.post('/simulate/:id', (req, res) => {
   const userId = parseInt(req.params.id);
   const user = userService.getUserById(userId);
@@ -105,7 +93,6 @@ router.post('/simulate/:id', (req, res) => {
   const others = userService.getAllUsers().filter(u => u.id !== userId);
   const actor  = others[Math.floor(Math.random() * others.length)];
 
-  // Weighted pool — engagement events are most common, follows and unfollows mix in
   const pool = [
     'LIKE_POST', 'LIKE_POST', 'LIKE_POST',
     'LIKE_STORY', 'LIKE_STORY',
@@ -118,7 +105,7 @@ router.post('/simulate/:id', (req, res) => {
 
   const event = activityService.addEvent(actor, user, type);
 
-  // Only unfollow events go into the notification feed
+  //unfollow events 
   if (type === 'UNFOLLOW') {
     notificationService.addUnfollowEvent(event);
   }

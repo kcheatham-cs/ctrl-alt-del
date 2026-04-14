@@ -17,7 +17,15 @@
       padding: 20px 40px;
       border-bottom: 1px solid #eee;
     }
-    .logo { font-size: 1.5rem; font-weight: 600; color: #6a0dad; }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #6a0dad;
+    }
+    .logo img { width: 36px; height: 36px; border-radius: 8px; }
 
     .hero {
       display: flex;
@@ -65,7 +73,10 @@
 </head>
 <body>
   <header>
-    <div class="logo">InstaRewind</div>
+    <div class="logo">
+      <img src="/assets/icon/3380app.png" alt="InstaRewind icon">
+      InstaRewind
+    </div>
     <a href="login.html" class="btn">Login</a>
   </header>
 
