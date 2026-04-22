@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Instagram Insights Dashboard</title>
+  <style>
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      background-color: #f5f5f5;
+      text-align: center;
+    }
+    .container { margin-top: 50px; }
+    .card {
+      background: white;
+      padding: 20px;
+      margin: 15px;
+      display: inline-block;
+      width: 200px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px gray;
+    }
+    .card p {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #6a0dad;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 20px;
+      margin-left: 8px;
+      border: none;
+      background-color: purple;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover { background-color: #5a009c; }
+
+    #notifications {
+      margin-top: 30px;
+      background: white;
+      padding: 15px;
+      width: 50%;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 10px;
+    }
+    .notif-item {
+      padding: 6px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 0.95rem;
+    }
+    .notif-item:last-child { border-bottom: none; }
+
+    .user-bar {
+      background: white;
+      padding: 12px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    .user-bar .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #6a0dad;
+    }
+    .user-bar .logo img { width: 30px; height: 30px; border-radius: 7px; }
+    .user-bar a { color: #6a0dad; font-size: 0.9rem; text-decoration: none; }
+    #loading { color: #888; margin-top: 60px; }
+  </style>
+</head>
+<body>
+
+<div class="user-bar">
+  <span class="logo">
+    <img src="/assets/icon/3380app.png" alt="InstaRewind icon">
+    InstaRewind
+  </span>
+  <span id="welcomeMsg"></span>
+  <a href="/site/login.html" onclick="sessionStorage.clear()">Logout</a>
+</div>
+
+<div id="loading">Loading dashboard...</div>
+
+<div id="dashboardContent" style="display:none">
+  <h1 style="margin-top:30px">📊 Instagram Engagement Dashboard</h1>
+
+  <div class="container">
+    <div class="card">
+      <h2>Followers</h2>
+      <p id="followers">—</p>
+    </div>
+    <div class="card">
+      <h2>Post Likes</h2>
+      <p id="likes">—</p>
+    </div>
+    <div class="card">
+      <h2>Comments</h2>
+      <p id="comments">—</p>
+    </div>
+    <div class="card">
+      <h2>Story Likes</h2>
+      <p id="storyLikes">—</p>
+    </div>
+  </div>
+
+  <button onclick="simulateActivity()">Run Simulation</button>
+  <button onclick="goToRewind()">View Rewind</button>
+
+  <div id="notifications">
+    <h3>🔔 Notifications</h3>
+    <div id="notifList"><p>No notifications yet.</p></div>
+  </div>
+</div>
+
+<script>
+  // Retrieve the logged-in user from sessionStorage (set by login.html).
+  // Falls back to user #1 so the page still works if opened directly.
+  const storedUser = JSON.parse(sessionStorage.getItem('user') || 'null');
+  const userId = storedUser ? storedUser.id : 1;
+
+  if (storedUser) {
+    document.getElementById('welcomeMsg').textContent = `Logged in as @${storedUser.username}`;
+  }
+
+  async function loadDashboard() {
+    try {
+      const res  = await fetch(`/api/dashboard/${userId}`);
+      const data = await res.json();
+      renderDashboard(data);
+    } catch (err) {
+      document.getElementById('loading').textContent = 'Failed to load dashboard. Is the backend running?';
+    }
+  }
+
+  function renderDashboard(data) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('dashboardContent').style.display = 'block';
+
+    document.getElementById('followers').textContent  = data.followers;
+    document.getElementById('likes').textContent      = data.postLikes;
+    document.getElementById('comments').textContent   = data.commentsCount;
+    document.getElementById('storyLikes').textContent = data.storyLikes;
+
+    renderNotifications(data.notifications || []);
+  }
+
+  function renderNotifications(notifications) {
+    const container = document.getElementById('notifList');
+    if (!notifications.length) {
+      container.innerHTML = '<p>No notifications yet.</p>';
+      return;
+    }
+    container.innerHTML = notifications
+      .map(n => `<div class="notif-item">${n.message}</div>`)
+      .join('');
+  }
+
+  async function simulateActivity() {
+    try {
+      const res  = await fetch(`/api/simulate/${userId}`, { method: 'POST' });
+      const data = await res.json();
+      renderDashboard(data);
+      if (data.simulatedEvent) {
+        const notifList = document.getElementById('notifList');
+        const banner = document.createElement('div');
+        banner.style.cssText = 'background:#fff3cd;padding:8px;border-radius:6px;margin-bottom:8px;font-weight:bold';
+        banner.textContent = '⚡ ' + data.simulatedEvent;
+        notifList.prepend(banner);
+      }
+    } catch (err) {
+      alert('Simulation failed. Is the backend running?');
+    }
+  }
+
+  function goToRewind() {
+    window.location.href = '/rewind.html';
+  }
+
+  loadDashboard();
+</script>
+
+</body>
+</html>

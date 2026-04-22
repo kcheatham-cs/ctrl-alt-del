@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Track who unfollowed you on Instagram and rewind your interactions."/>
+  <title>InstaRewind</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body { background: #ffffff; color: #333; }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      border-bottom: 1px solid #eee;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #6a0dad;
+    }
+    .logo img { width: 36px; height: 36px; border-radius: 8px; }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 80vh;
+      text-align: center;
+      padding: 40px;
+    }
+    h1 { font-size: 2.5rem; font-weight: 600; margin-bottom: 16px; }
+    .tagline { font-size: 1.1rem; color: #666; max-width: 500px; margin-bottom: 32px; }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 36px;
+      background: #6a0dad;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn:hover { background: #5a009c; }
+
+    .features {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      padding: 40px;
+      flex-wrap: wrap;
+    }
+    .feature-card {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 24px;
+      width: 200px;
+      text-align: center;
+    }
+    .feature-card h3 { margin-bottom: 8px; color: #6a0dad; }
+    .feature-card p { font-size: 0.9rem; color: #666; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/assets/icon/3380app.png" alt="InstaRewind icon">
+      InstaRewind
+    </div>
+    <a href="login.html" class="btn">Login</a>
+  </header>
+
+  <section class="hero">
+    <h1>Know Your Instagram Story</h1>
+    <p class="tagline">Track who unfollowed you, see your top engagers, and rewind your year — all in one place.</p>
+    <a href="login.html" class="btn">Get Started</a>
+  </section>
+
+  <section class="features">
+    <div class="feature-card">
+      <h3>Unfollow Tracker</h3>
+      <p>See exactly who stopped following you and when.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Engagement Stats</h3>
+      <p>Likes, comments, and story views at a glance.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Year in Rewind</h3>
+      <p>Rank your top fans and most engaged followers.</p>
+    </div>
+  </section>
+</body>
+</html>
