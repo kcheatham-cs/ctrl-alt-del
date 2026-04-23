@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> About Page</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Inter",'Segoe UI', sans-serif;
+        }
+
+        :root{
+            --purple: #833ab4;;
+            --pink: #fd1d73;
+            --orange: #ffc073;
+            --ig-gradient: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            --ig-gradient-full:linear-gradient(135deg, #fcb045 0%, #dc2743 40%, #833ab4 80%, #405de6 100%);
+        }
+        
+        body{
+            background: linear-gradient(135deg, #1a0a2e 0%, #2d1155 30%, #4a0e2e 60%, #1a0a2e 100%);
+            background-attachment: scroll;
+            min-height: 100vh;
+        }
+
+        /*Navigation panel*/
+        .nav{
+            background: rgba(26, 10, 46, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(188, 24, 136, 0.3);
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 9vh;
+            padding: 0 2.5rem;
+        }
+
+        #teamName{
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: var(--ig-gradient-full);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            
+        }
+
+        .nav-links{
+            display: flex;
+            gap: 2rem;
+            list-style-type:none;
+        }
+
+        .nav-links a{
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            transition: color 0.2s;  
+        }
+
+        .nav-links a:hover{
+            color: rgb(255,223,158);
+        }
+
+        .panel{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: calc(100vh - 60px);
+            padding: 4rem 5rem;
+            max-width: 700px;
+        }
+
+        #welcome{
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            background: var(--ig-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        #header{
+            color: white;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            margin-bottom: 1.3rem;
+        }
+
+        #subText{
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2rem;
+            max-width: 500px;
+            margin-bottom: 2.5rem;
+            line-height: 1.75;
+        }
+        /* Button for login page*/
+
+        .button{
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        #toLogin{
+            padding: 0.75rem 2rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border: none;
+            border-radius: 10px;
+            background: var(--ig-gradient-full);
+            color: white;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+
+        #toLogin::before{
+            content: "Get Started";
+        }
+
+        #toLogin:hover{
+            opacity: 0.88;
+            transform: translateY(-2px);
+        }
+
+        /*Feature Cards*/
+        .cards-section {
+            padding: 1rem 5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 1.25rem;
+            max-width: 1100px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1.2px solid rgba(188, 24, 136, 0.25);
+            border-radius: 18px;
+            padding: 1.5rem;
+            color: white;
+            transition: border-color 0.2s, background 0.2s, transform 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        /**/
+         .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--ig-gradient-full);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.09);
+            border-color: rgba(237, 178, 102, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 0.6rem;
+            background: var(--ig-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        .card p{
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+
+
+
+
+
+
+
+    </style>
+
+</head>
+
+<body>
+    <nav class = "nav">
+        <h1 id = "teamName">CTRL-ALT-DEL</h1>
+        <ul class = "nav-links">
+            <li><a href = "about.html"> About</a></li>
+            <li><a href = "login.html"> Login</a></li>
+            <li><a href = "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.instagram.com/%3Fhl%3Den&ved=2ahUKEwiLivqThYOUAxWFz_ACHRfcLxEQFnoECAwQAQ&usg=AOvVaw0zLAogOj-in86exA-ZYGu1">Instagram</a></li>
+        </ul>
+        
+    </nav>
+    <div class = "panel">
+        <p id="welcome">about our website</p>
+        <h1 id = "header"> KickRocks</h1>
+        <p id = "subText">Right now, Instagram does not clearly show information like who unfollows you, who interacts with your account the most, or how accounts are connected beyond basic metrics. This lack of transparency makes it hard for users to fully understand their engagement and growth. This inspired us to increase the role social media plays in personal branding, online presence. With that being said, we are dedicated to creating tools that make engagement data easier to understand for everyday users and influencers.</p>
+        <div class = "button">
+            <button id = "toLogin"></button>
+        </div>
+    </div>
+
+    <div class = "cards-section">
+        <div class = "card">
+            <div>
+                <h3>Notification System</h3>
+                <p>Our notification system alerts the user when an Instagram account unfollows their account. Thus, allowing the logged in user to easily tell the other user to kick rocks by unfollowing back in response without having to scroll throughout their entire list of followers to find the account.</p>
+            </div>
+        </div>
+
+        <div class = "card">
+            <div>
+                <h3>Engagement Leaderboard</h3>
+                <p>Our engagement leaderboard or "instaRewind" feature provides the user with a comprehensive analysis of their engagement data. For example, our leaderboard shows the top 8 user profiles that liked the most of your stories and posts, comments, and story views. It also shows the total post likes, story views, and comments the user has received. Notably, this information is of access to the user year-round.</p>
+            </div>
+        </div>
+
+        <div class = "card">
+            <div>
+                <h3>Search System</h3>
+                <p>Currently instagram users are able to search for other accounts only through the person's instagram handle or user name. However, our search system feature allows the user to search for other profiles through their emails and phone numbers used to set up their profiles.</p>
+            </div>
+        </div>
+    </div>
+    <script>
+
+    </script>
+</body>
+</html>
