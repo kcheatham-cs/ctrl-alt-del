@@ -1,123 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Instagram Rewind</title>
-  <style>
-    body {
-      font-family: 'Times New Roman', Times, serif;
-      text-align: center;
-      background-color: black;
-      color: white;
-    }
-    .box {
-      background: #222;
-      margin: 20px auto;
-      padding: 20px;
-      width: 60%;
-      border-radius: 10px;
-    }
-    h1 { color: #ffcc00; margin-top: 30px; }
-    h2 { margin-bottom: 10px; }
+    <title>Rewind</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    .user-list { color: #ccc; line-height: 1.8; }
-    .user-pill {
-      display: inline-block;
-      background: #333;
-      padding: 4px 12px;
-      border-radius: 20px;
-      margin: 3px;
-      font-size: 0.9rem;
-    }
-    .stat { font-size: 1.4rem; font-weight: bold; color: #ffcc00; }
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-    button {
-      padding: 10px 20px;
-      margin: 20px 8px;
-      border: none;
-      background-color: purple;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover { background-color: #5a009c; }
-    #loading { color: #aaa; margin-top: 60px; }
-  </style>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Inter",'Segoe UI', sans-serif;
+        }
+
+        :root{
+            --ig-gradient-full: linear-gradient(135deg, #fcb045 0%, #dc2743 40%, #833ab4 80%, #405de6 100%);
+        }
+
+        body{
+            background: linear-gradient(135deg, #1a0a2e 0%, #2d1155 30%, #4a0e2e 60%, #1a0a2e 100%);
+            color: white;
+        }
+
+        .container{
+            padding: 3rem 5rem;
+            max-width: 900px;
+        }
+
+        h1{
+            font-size: 2.3rem;
+            margin-bottom: 2rem;
+        }
+
+        .box{
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 1.3rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .box h2{
+            font-size: 1rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 0.3rem;
+        }
+
+        .box p{
+            font-size: 1rem;
+        }
+
+        button{
+            margin-top: 1.5rem;
+            padding: 0.7rem 1.8rem;
+            border-radius: 10px;
+            border: none;
+            background: var(--ig-gradient-full);
+            color: white;
+            cursor: pointer;
+        }
+
+    </style>
 </head>
+
 <body>
 
-<h1>🎉 Your Instagram Rewind 🎉</h1>
-<p id="loading">Loading rewind data...</p>
+<div class="container">
 
-<div id="rewindContent" style="display:none">
+    <h1>Rewind</h1>
 
-  <div class="box">
-    <h2>📊 Your Year in Numbers</h2>
-    <p>Total followers: <span class="stat" id="totalFollowers">—</span></p>
-    <p>Total post likes received: <span class="stat" id="totalPostLikes">—</span></p>
-    <p>Total story views received: <span class="stat" id="totalStoryViews">—</span></p>
-    <p>Total comments received: <span class="stat" id="totalComments">—</span></p>
-  </div>
+    <div class="box">
+        <h2>Top Post Likers</h2>
+        <p>User456, User789, User321</p>
+    </div>
 
-  <div class="box">
-    <h2>🔥 Top Post Likers</h2>
-    <div class="user-list" id="topPostLikers">—</div>
-  </div>
+    <div class="box">
+        <h2>Top Commenters</h2>
+        <p>User222, User888, User999</p>
+    </div>
 
-  <div class="box">
-    <h2>💬 Top Commenters</h2>
-    <div class="user-list" id="topCommenters">—</div>
-  </div>
+    <div class="box">
+        <h2>Top Story Viewers</h2>
+        <p>User111, User444, User777</p>
+    </div>
 
-  <div class="box">
-    <h2>👀 Top Story Viewers</h2>
-    <div class="user-list" id="topStoryViewers">—</div>
-  </div>
-
-  <div class="box">
-    <h2>❤️ Top Story Likers</h2>
-    <div class="user-list" id="topStoryLikers">—</div>
-  </div>
+    <button onclick="goBack()">Back to Dashboard</button>
 
 </div>
 
-<button onclick="goBack()">Back to Dashboard</button>
-
 <script>
-  const storedUser = JSON.parse(sessionStorage.getItem('user') || 'null');
-  const userId = storedUser ? storedUser.id : 1;
-
-  function renderUserList(users) {
-    if (!users || users.length === 0) return '<span style="color:#666">No data yet</span>';
-    return users.map(u => `<span class="user-pill">@${u.username} <small>(${u.count})</small></span>`).join('');
-  }
-
-  async function loadRewind() {
-    try {
-      const res  = await fetch(`/api/rewind/${userId}`);
-      const data = await res.json();
-
-      document.getElementById('loading').style.display    = 'none';
-      document.getElementById('rewindContent').style.display = 'block';
-
-      document.getElementById('totalFollowers').textContent  = data.totalFollowers;
-      document.getElementById('totalPostLikes').textContent  = data.totalPostLikes;
-      document.getElementById('totalStoryViews').textContent = data.totalStoryViews;
-      document.getElementById('totalComments').textContent   = data.totalComments;
-
-      document.getElementById('topPostLikers').innerHTML   = renderUserList(data.topPostLikers);
-      document.getElementById('topCommenters').innerHTML   = renderUserList(data.topCommenters);
-      document.getElementById('topStoryViewers').innerHTML = renderUserList(data.topStoryViewers);
-      document.getElementById('topStoryLikers').innerHTML  = renderUserList(data.topStoryLikers);
-    } catch (err) {
-      document.getElementById('loading').textContent = 'Failed to load rewind data. Is the backend running?';
-    }
-  }
-
-  function goBack() {
-    window.location.href = '/dashboard.html';
-  }
-
-  loadRewind();
+function goBack() {
+    window.location.href = "dashboard.html";
+}
 </script>
 
 </body>
