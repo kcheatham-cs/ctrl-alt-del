@@ -4,7 +4,7 @@ Group Project: 3380
 ---
 
 ## Team
-Brandon, Joy, Kiersten, Ceionna
+Brandon, Joy, Kiersten, Ceionna, TyAsia, Tatiyana
 
 ---
 
