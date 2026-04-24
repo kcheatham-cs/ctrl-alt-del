@@ -227,7 +227,7 @@
         <h1 id = "header"> KickRocks</h1>
         <p id = "subText">Right now, Instagram does not clearly show information like who unfollows you, who interacts with your account the most, or how accounts are connected beyond basic metrics. This lack of transparency makes it hard for users to fully understand their engagement and growth. This inspired us to increase the role social media plays in personal branding, online presence. With that being said, we are dedicated to creating tools that make engagement data easier to understand for everyday users and influencers.</p>
         <div class = "button">
-            <button id = "toLogin"></button>
+            <button onClick ="goToLogin" id = "toLogin"></button>
         </div>
     </div>
 
@@ -254,6 +254,9 @@
         </div>
     </div>
     <script>
+        function goToLogin(){
+            window.location.href = '/site/login.html';
+        }
 
     </script>
 </body>
