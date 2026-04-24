@@ -3,27 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login - InstaRewind</title>
+  <title>Login - KickRocks</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    :root{
+            --purple: #833ab4;;
+            --pink: #fd1d73;
+            --orange: #ffc073;
+            --ig-gradient: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            --ig-gradient-full:linear-gradient(135deg, #fcb045 0%, #dc2743 40%, #833ab4 80%, #405de6 100%);
+        }
+    
     body {
       height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #ffffff;
+      background: linear-gradient(135deg, #1a0a2e 0%, #2d1155 30%, #4a0e2e 60%, #1a0a2e 100%);
+      background-attachment: scroll;
+      min-height: 100vh;
     }
     .login-container {
       width: 100%;
       max-width: 350px;
       padding: 30px;
       border: 1px solid #eee;
+      background-color:white;
       border-radius: 12px;
       text-align: center;
     }
-    .logo { font-size: 1.8rem; font-weight: 600; color: #6a0dad; margin-bottom: 10px; }
-    .subtitle { font-size: 1.1rem; color: #777; margin-bottom: 20px; }
+    .logo { 
+      font-size: 1.9rem; 
+      font-weight: 600; 
+      background: var(--ig-gradient-full);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px; 
+    }
+    .subtitle { font-size: 1.12rem; color: black; margin-bottom: 20px; }
 
     input {
       width: 100%;
@@ -43,9 +62,10 @@
       border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
+      font-size: 0.85rem;
       margin-top: 5px;
     }
-    button:hover { background: #5a009c; }
+    button:hover {  background: var(--ig-gradient-full); }
     button:disabled { background: #aaa; cursor: not-allowed; }
 
     .error { color: red; font-size: 0.85rem; margin-top: 10px; display: none; }
@@ -54,7 +74,7 @@
 </head>
 <body>
 <div class="login-container">
-  <div class="logo">InstaRewind</div>
+  <div class="logo">KickRocks</div>
   <div class="subtitle">Login to continue</div>
 
   <form onsubmit="login(event)">
