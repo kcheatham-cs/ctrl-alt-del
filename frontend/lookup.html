@@ -3,43 +3,84 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
   <title>Lookup - CTRL-ALT-DEL</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+      * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          font-family: "Inter",'Segoe UI', sans-serif;
+        }
+
+      :root{
+            --purple: #833ab4;;
+            --pink: #fd1d73;
+            --orange: #ffc073;
+            --ig-gradient: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            --ig-gradient-full:linear-gradient(135deg, #fcb045 0%, #dc2743 40%, #833ab4 80%, #405de6 100%);
+        }
+        
+        body{
+            background: linear-gradient(135deg, #1a0a2e 0%, #2d1155 30%, #4a0e2e 60%, #1a0a2e 100%);
+            background-attachment: scroll;
+            min-height: 100vh;
+        }
+
     .page {
       min-height: 600px;
-      background: linear-gradient(135deg, #1a0a3c 0%, #2d0f6b 35%, #5a1a6e 65%, #7b1a3a 100%);
       border-radius: 12px;
       overflow: hidden;
       position: relative;
     }
-    .navbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 32px;
-      border-bottom: 0.5px solid rgba(255,255,255,0.12);
-    }
-    .brand {
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      background: linear-gradient(90deg, #ffc273, #e56969);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .nav-links { display: flex; gap: 28px; align-items: center; }
-    .nav-links a {
-      color: rgba(255,255,255,0.88);
-      font-size: 14px;
-      text-decoration: none;
-      font-weight: 400;
-      letter-spacing: 0.3px;
-      cursor: pointer;
-    }
-    .nav-links a:hover { color: #fff; }
-    .nav-links a.active { color: #fff; font-weight: 500; }
+    /*Navigation panel*/
+        .nav{
+            background: rgba(26, 10, 46, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(188, 24, 136, 0.3);
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 9vh;
+            padding: 0 2.5rem;
+        }
+
+        #teamName{
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: var(--ig-gradient-full);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            
+        }
+
+        .nav-links{
+            display: flex;
+            gap: 2rem;
+            list-style-type:none;
+        }
+
+        .nav-links a{
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            transition: color 0.2s;  
+        }
+
+        .nav-links a:hover{
+            color: rgb(255,223,158);
+        }
     .content {
       display: flex;
       flex-direction: column;
@@ -47,26 +88,26 @@
       padding: 56px 24px 40px;
     }
     .page-label {
-      font-size: 11px;
+      font-size: .95rem;
       font-weight: 700;
       letter-spacing: 3px;
       text-transform: uppercase;
-      background: linear-gradient(90deg, #ffc273, #c1558b);
+      background: var(--ig-gradient-full);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       margin-bottom: 10px;
     }
     .page-title {
-      font-size: 32px;
+      font-size: 2.5rem;
       font-weight: 700;
       color: #fff;
       margin-bottom: 10px;
       letter-spacing: -0.5px;
     }
     .page-subtitle {
-      font-size: 14px;
-      color: rgba(255,255,255,0.55);
+      font-size: .92rem;
+      color: rgba(255, 255, 255, 0.7);
       margin-bottom: 40px;
       text-align: center;
       max-width: 380px;
@@ -106,7 +147,7 @@
     .username-input::placeholder { color: #aaa; }
     .username-input:focus { border-color: #8a49a1; background: #fff; }
     .search-btn {
-      background: #6b30b5;
+      background: #6a0dad;
       color: #fff;
       border: none;
       border-radius: 8px;
@@ -117,7 +158,7 @@
       white-space: nowrap;
       letter-spacing: 0.2px;
     }
-    .search-btn:hover { background: #7d3cc8; }
+    .search-btn:hover { background: var(--ig-gradient-full); }
     .divider {
       border: none;
       border-top: 0.5px solid #eee;
@@ -193,17 +234,20 @@
   </style>
 </head>
 <body>
-  <div class="page">
-    <nav class="navbar">
-      <span class="brand">CTRL-ALT-DEL</span>
-      <div class="nav-links">
-        <a href="#">About</a>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="rewind.html">Rewind</a>
-        <a href="#" class="active">Lookup</a>
-        <a href="site/login.html">Login</a>
-      </div>
+  
+  <nav class = "nav">
+        <h1 id = "teamName">CTRL-ALT-DEL</h1>
+        <ul class = "nav-links">
+            <li><a href = "/site/about.html">About</a></li>
+            <l1><a href = "rewind.html">InstaRewind</a></l1>
+            <l1><a href = "/frontend/dashboard.html">Dashboard</a></l1>
+            <l1><a href= "/frontend/lookup.html">Lookup</a></l1>
+            <l1><a href= "/site/login.html" onclick="sessionStorage.clear()">Logout</a></l1>
+            <li><a href = "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.instagram.com/%3Fhl%3Den&ved=2ahUKEwiLivqThYOUAxWFz_ACHRfcLxEQFnoECAwQAQ&usg=AOvVaw0zLAogOj-in86exA-ZYGu1">Instagram</a></li>
+        </ul>
+        
     </nav>
+  <div class="page">
 
     <div class="content">
       <div class="page-label">Follower Lookup</div>
