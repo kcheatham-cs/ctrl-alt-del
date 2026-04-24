@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lookup - CTRL-ALT-DEL</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+    .page {
+      min-height: 600px;
+      background: linear-gradient(135deg, #1a0a3c 0%, #2d0f6b 35%, #5a1a6e 65%, #7b1a3a 100%);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 32px;
+      border-bottom: 0.5px solid rgba(255,255,255,0.12);
+    }
+    .brand {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      background: linear-gradient(90deg, #ffc273, #e56969);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a {
+      color: rgba(255,255,255,0.88);
+      font-size: 14px;
+      text-decoration: none;
+      font-weight: 400;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a.active { color: #fff; font-weight: 500; }
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 56px 24px 40px;
+    }
+    .page-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #ffc273, #c1558b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+    .page-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+    .page-subtitle {
+      font-size: 14px;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 40px;
+      text-align: center;
+      max-width: 380px;
+      line-height: 1.6;
+    }
+    .lookup-card {
+      background: rgba(255,255,255,0.97);
+      border-radius: 16px;
+      padding: 36px 40px 32px;
+      width: 100%;
+      max-width: 460px;
+      box-shadow: none;
+    }
+    .input-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #555;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .username-input {
+      flex: 1;
+      border: 1.5px solid #ddd;
+      border-radius: 8px;
+      padding: 11px 14px;
+      font-size: 14px;
+      color: #222;
+      background: #fafafa;
+      outline: none;
+    }
+    .username-input::placeholder { color: #aaa; }
+    .username-input:focus { border-color: #8a49a1; background: #fff; }
+    .search-btn {
+      background: #6b30b5;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 11px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      letter-spacing: 0.2px;
+    }
+    .search-btn:hover { background: #7d3cc8; }
+    .divider {
+      border: none;
+      border-top: 0.5px solid #eee;
+      margin-bottom: 24px;
+    }
+    .result-section { display: none; }
+    .result-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #888;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .profile-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffc273, #c1558b, #8a49a1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .profile-name { font-size: 16px; font-weight: 600; color: #1a1a1a; }
+    .profile-handle { font-size: 13px; color: #999; margin-top: 1px; }
+    .info-rows { display: flex; flex-direction: column; gap: 10px; }
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #f7f5fb;
+      border-radius: 8px;
+      padding: 12px 14px;
+      border: 0.5px solid #e8e2f2;
+    }
+    .info-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #c1558b, #8a49a1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .info-icon svg { width: 15px; height: 15px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .info-content { flex: 1; }
+    .info-field-label { font-size: 11px; color: #999; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+    .info-value { font-size: 14px; color: #2a2a2a; font-weight: 500; margin-top: 1px; }
+    .privacy-note {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 22px;
+      padding: 9px 12px;
+      background: #fff8f0;
+      border-radius: 7px;
+      border: 0.5px solid #ffd5a0;
+    }
+    .privacy-note svg { width: 14px; height: 14px; fill: none; stroke: #c1558b; stroke-width: 2; flex-shrink: 0; }
+    .privacy-note span { font-size: 11.5px; color: #a0556e; line-height: 1.4; }
+    .error { color: red; font-size: 14px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <nav class="navbar">
+      <span class="brand">CTRL-ALT-DEL</span>
+      <div class="nav-links">
+        <a href="#">About</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="rewind.html">Rewind</a>
+        <a href="#" class="active">Lookup</a>
+        <a href="site/login.html">Login</a>
+      </div>
+    </nav>
+
+    <div class="content">
+      <div class="page-label">Follower Lookup</div>
+      <div class="page-title">Find Contact Info</div>
+      <div class="page-subtitle">Enter a follower's username to view the phone number or email linked to their account.</div>
+
+      <div class="lookup-card">
+        <div class="input-label">Follower Username</div>
+        <div class="input-row">
+          <input id="username-input" class="username-input" type="text" placeholder="@username" />
+          <button id="search-btn" class="search-btn">Search</button>
+        </div>
+
+        <hr class="divider" />
+
+        <div id="result-section" class="result-section">
+          <div class="result-title">Account Info</div>
+
+          <div class="profile-row">
+            <div class="avatar" id="avatar">JD</div>
+            <div>
+              <div class="profile-name" id="profile-name">Jane Doe</div>
+              <div class="profile-handle" id="profile-handle">@j.doe_92</div>
+            </div>
+          </div>
+
+          <div class="info-rows">
+            <div class="info-row">
+              <div class="info-icon">
+                <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+              </div>
+              <div class="info-content">
+                <div class="info-field-label">Email</div>
+                <div class="info-value" id="email-value">janedoe92@email.com</div>
+              </div>
+            </div>
+
+            <div class="info-row">
+              <div class="info-icon">
+                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.5 12 19.79 19.79 0 011.09 3.18 2 2 0 013.08 1h3a2 2 0 012 1.72c.13.96.36 1.91.7 2.81a2 2 0 01-.45 2.11L7.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0122 16.92z"/></svg>
+              </div>
+              <div class="info-content">
+                <div class="info-field-label">Phone</div>
+                <div class="info-value" id="phone-value">(504) 555-0147</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="privacy-note">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Only visible for accounts that follow you. This info is tied to their registered account.</span>
+          </div>
+        </div>
+        <div id="error-msg" class="error" style="display: none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const searchBtn = document.getElementById('search-btn');
+    const usernameInput = document.getElementById('username-input');
+    const resultSection = document.getElementById('result-section');
+    const errorMsg = document.getElementById('error-msg');
+    const avatar = document.getElementById('avatar');
+    const profileName = document.getElementById('profile-name');
+    const profileHandle = document.getElementById('profile-handle');
+    const emailValue = document.getElementById('email-value');
+    const phoneValue = document.getElementById('phone-value');
+
+    // Assume logged in user ID is 1 (admin), in real app get from session
+    const loggedInUserId = 1;
+
+    searchBtn.addEventListener('click', async () => {
+      const query = usernameInput.value.trim();
+      if (!query) {
+        showError('Please enter a username.');
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/lookup?userId=${loggedInUserId}&query=${encodeURIComponent(query)}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          // Update the UI with the data
+          profileName.textContent = data.username;
+          profileHandle.textContent = `@${data.username}`;
+          avatar.textContent = data.username.slice(0, 2).toUpperCase();
+          emailValue.textContent = data.email;
+          phoneValue.textContent = data.phone;
+          resultSection.style.display = 'block';
+          errorMsg.style.display = 'none';
+        } else {
+          showError(data.error || 'An error occurred.');
+        }
+      } catch (error) {
+        showError('Failed to fetch data. Please try again.');
+      }
+    });
+
+    function showError(message) {
+      errorMsg.textContent = message;
+      errorMsg.style.display = 'block';
+      resultSection.style.display = 'none';
+    }
+  </script>
+</body>
+</html>
