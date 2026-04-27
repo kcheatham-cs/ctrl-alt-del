@@ -317,8 +317,8 @@
     const emailValue = document.getElementById('email-value');
     const phoneValue = document.getElementById('phone-value');
 
-    // Assume logged in user ID is 1 (admin), in real app get from session
-    const loggedInUserId = 1;
+    const storedUser = JSON.parse(sessionStorage.getItem('user') || 'null');
+    const loggedInUserId = storedUser ? storedUser.id : 1;
 
     searchBtn.addEventListener('click', async () => {
       const query = usernameInput.value.trim();

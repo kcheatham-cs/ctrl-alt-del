@@ -181,7 +181,8 @@
   const userId = storedUser ? storedUser.id : 1;
 
   if (storedUser) {
-    document.getElementById('welcomeMsg').textContent = `Logged in as @${storedUser.username}`;
+    const el = document.getElementById('welcomeMsg');
+    if (el) el.textContent = `Logged in as @${storedUser.username}`;
   }
 
   let pollInterval = null;
@@ -206,7 +207,17 @@
     document.getElementById('comments').textContent   = data.commentsCount;
     document.getElementById('storyLikes').textContent = data.storyLikes;
 
-    renderNotifications(data.notifications || []);
+    loadNotifications();
+  }
+
+  async function loadNotifications() {
+    try {
+      const res = await fetch(`/api/activity/${userId}`);
+      const data = await res.json();
+      renderNotifications(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error('Error loading notifications:', err);
+    }
   }
 
   function renderNotifications(notifications) {
@@ -223,7 +234,7 @@
   async function simulateActivity() {
     try {
       document.getElementById('stopBtn').style.display = 'inline-block';
-      const res  = await fetch(`/api/simulate/batch/${userId}`, { method: 'POST' });
+      const res  = await fetch(`/api/simulate/${userId}`, { method: 'POST' });
       const data = await res.json();
       renderDashboard(data);
       
@@ -249,21 +260,15 @@
   }
 
   async function stopSimulation() {
+    if (pollInterval) clearInterval(pollInterval);
+    if (simulationTimeout) clearTimeout(simulationTimeout);
+    document.getElementById('stopBtn').style.display = 'none';
     try {
-      await fetch(`/api/simulate/stop/${userId}`, { method: 'POST' });
-      if (pollInterval) {
-        clearInterval(pollInterval);
-      }
-      if (simulationTimeout) {
-        clearTimeout(simulationTimeout);
-      }
-      document.getElementById('stopBtn').style.display = 'none';
-      // Final dashboard update
       const dashRes = await fetch(`/api/dashboard/${userId}`);
       const dashData = await dashRes.json();
       renderDashboard(dashData);
     } catch (err) {
-      alert('Stop simulation failed. Is the backend running?');
+      console.error('Error refreshing dashboard after stop:', err);
     }
   }
 

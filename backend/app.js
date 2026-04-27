@@ -17,6 +17,8 @@ activityService.generate(userService.users);
 notificationService.load(activityService);
 rewindService.init(activityService, userService);
 
+app.use('/api', routes);
+
 app.get('/', (req, res) => {
   res.redirect('/site/about.html');
 });

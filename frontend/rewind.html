@@ -342,9 +342,6 @@
       const res  = await fetch(`/api/rewind/${userId}`);
       const data = await res.json();
 
-      document.getElementById('loading').style.display    = 'none';
-      document.getElementById('rewindContent').style.display = 'block';
-
       document.getElementById('totalFollowers').textContent  = data.totalFollowers;
       document.getElementById('totalPostLikes').textContent  = data.totalPostLikes;
       document.getElementById('totalStoryViews').textContent = data.totalStoryViews;
