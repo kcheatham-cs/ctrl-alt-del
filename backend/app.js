@@ -18,8 +18,9 @@ notificationService.load(activityService);
 rewindService.init(activityService, userService);
 
 app.use('/api', routes);
+
 app.get('/', (req, res) => {
-  res.redirect('/site/login.html');
+  res.redirect('/site/about.html');
 });
 
 const PORT = 3000;

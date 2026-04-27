@@ -14,6 +14,7 @@ InstaRewind is an Instagram-style engagement tracker that shows you:
 - Your follower count, post likes, comments, and story stats
 - A personalized "Rewind" ranking your most engaged followers
 - Live notifications when someone unfollows you
+- A search system that allows you to view the email/phone number of a follower
 
 ---
 

@@ -125,13 +125,14 @@
 
   <nav class = "nav">
   <h1 id = "teamName">CTRL-ALT-DEL</h1>
-        <ul class = "nav-links">
-            <li><a href = "/site/about.html">About</a></li>
-            <l1><a href = "/frontend/dashboard.html">Dashboard</a></l1>
-            <l1><a href = "rewind.html">InstaRewind</a></l1>
-            <l1><a href= "/frontend/lookup.html">Lookup</a></l1>
-            <l1><a href= "/site/login.html" onclick="sessionStorage.clear()">Logout</a></l1>
-            <li><a href = "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.instagram.com/%3Fhl%3Den&ved=2ahUKEwiLivqThYOUAxWFz_ACHRfcLxEQFnoECAwQAQ&usg=AOvVaw0zLAogOj-in86exA-ZYGu1">Instagram</a></li>
+        <ul class="nav-links">
+  <li><a href="/site/about.html">About</a></li>
+  <li><a href="/dashboard.html">Dashboard</a></li>
+  <li><a href="/rewind.html">InstaRewind</a></li>
+  <li><a href="/lookup.html">Lookup</a></li>
+  <li><a href="/site/login.html" onclick="sessionStorage.clear()">Logout</a></li>
+  <li><a href="https://www.instagram.com/">Instagram</a></li>
+</ul>
         </ul>
         
     </nav>
@@ -180,7 +181,8 @@
   const userId = storedUser ? storedUser.id : 1;
 
   if (storedUser) {
-    document.getElementById('welcomeMsg').textContent = `Logged in as @${storedUser.username}`;
+    const el = document.getElementById('welcomeMsg');
+    if (el) el.textContent = `Logged in as @${storedUser.username}`;
   }
 
   let pollInterval = null;
@@ -205,7 +207,17 @@
     document.getElementById('comments').textContent   = data.commentsCount;
     document.getElementById('storyLikes').textContent = data.storyLikes;
 
-    renderNotifications(data.notifications || []);
+    loadNotifications();
+  }
+
+  async function loadNotifications() {
+    try {
+      const res = await fetch(`/api/activity/${userId}`);
+      const data = await res.json();
+      renderNotifications(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error('Error loading notifications:', err);
+    }
   }
 
   function renderNotifications(notifications) {
@@ -222,7 +234,7 @@
   async function simulateActivity() {
     try {
       document.getElementById('stopBtn').style.display = 'inline-block';
-      const res  = await fetch(`/api/simulate/batch/${userId}`, { method: 'POST' });
+      const res  = await fetch(`/api/simulate/${userId}`, { method: 'POST' });
       const data = await res.json();
       renderDashboard(data);
       
@@ -248,21 +260,15 @@
   }
 
   async function stopSimulation() {
+    if (pollInterval) clearInterval(pollInterval);
+    if (simulationTimeout) clearTimeout(simulationTimeout);
+    document.getElementById('stopBtn').style.display = 'none';
     try {
-      await fetch(`/api/simulate/stop/${userId}`, { method: 'POST' });
-      if (pollInterval) {
-        clearInterval(pollInterval);
-      }
-      if (simulationTimeout) {
-        clearTimeout(simulationTimeout);
-      }
-      document.getElementById('stopBtn').style.display = 'none';
-      // Final dashboard update
       const dashRes = await fetch(`/api/dashboard/${userId}`);
       const dashData = await dashRes.json();
       renderDashboard(dashData);
     } catch (err) {
-      alert('Stop simulation failed. Is the backend running?');
+      console.error('Error refreshing dashboard after stop:', err);
     }
   }
 

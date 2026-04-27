@@ -6,6 +6,7 @@ const SearchService      = require('../services/SearchService');
 const activityService    = require('../services/ActivityService');
 const notificationService = require('../services/NotificationService');
 const rewindService      = require('../services/RewindService');
+const lookupService      = require('../services/LookupService');
 
 router.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -126,6 +127,37 @@ router.post('/simulate/:id', (req, res) => {
     notificationCount: notifications.length,
     simulatedEvent: labels[type]
   });
+});
+
+//Activity (followers + unfollowers)
+router.get('/activity/:id', (req, res) => {
+  const userId = parseInt(req.params.id);
+  const user = userService.getUserById(userId);
+  if (!user) return res.status(404).json({ error: 'User not found' });
+
+  const events = activityService.events
+    .filter(e => e.toUserId === userId && (e.type === 'FOLLOW' || e.type === 'UNFOLLOW'))
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+    .slice(0, 20)
+    .map(e => ({
+      type: e.type,
+      fromUsername: e.fromUsername,
+      timestamp: e.timestamp,
+      message: e.type === 'FOLLOW'
+        ? `@${e.fromUsername} followed you`
+        : `@${e.fromUsername} unfollowed you`
+    }));
+
+  res.json(events);
+});
+
+//Lookup
+router.get('/lookup', (req, res) => {
+  const userId = parseInt(req.query.userId);
+  const query  = req.query.query || '';
+  const result = lookupService.lookupFollower(userId, query);
+  if (!result) return res.status(404).json({ error: 'User not found or not a follower' });
+  res.json(result);
 });
 
 module.exports = router;
