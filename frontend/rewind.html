@@ -107,12 +107,12 @@
     
         .page-header p {
             font-size: 0.95rem;
-             color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .container1{
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 1rem;
             margin-bottom: 2.5rem;
             margin-top: 1.5vh;
@@ -269,12 +269,12 @@
 
     
     <div class="page-header">
-        <p class= "titles">Instagram Analytics</p>
+        <h3 class= "titles">Instagram Analytics</h3>
         <h1>Engagement Overview</h1>
         <p>Overall stats and top engagers</p>
     </div>
 
-    <p class = "titles"> Your Stats</p>
+    <h3 class = "titles"> Your Stats</h3>
     <div class = "container1">
 
         <div class = "card">
@@ -285,6 +285,11 @@
         <div class = "card">
             <h2 class = "heading">Likes on posts</h2>
             <p><span class="stat" id="totalPostLikes">—</span></p>
+        </div>
+
+        <div class = "card">
+            <h2 class = "heading">Likes on Stories</h2>
+            <p><span class="stat" id="totalStoryLikes">—</span></p>
         </div>
 
          <div class = "card">
@@ -299,7 +304,7 @@
 
     </div>
 
-    <p class = "titles">Top engagagers</p>
+    <h3 class = "titles">Top engagagers</h3>
     <div class="container2">
        
     <div class="box">
@@ -346,6 +351,7 @@
       document.getElementById('totalPostLikes').textContent  = data.totalPostLikes;
       document.getElementById('totalStoryViews').textContent = data.totalStoryViews;
       document.getElementById('totalComments').textContent   = data.totalComments;
+      document.getElementById('totalStoryLikes').textContent = data.totalStoryLikes;
 
       document.getElementById('topPostLikers').innerHTML   = renderUserList(data.topPostLikers);
       document.getElementById('topCommenters').innerHTML   = renderUserList(data.topCommenters);
