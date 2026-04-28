@@ -27,6 +27,46 @@
           min-height: 100vh;
       }
 
+      #dashboardContent{
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 9vh ;
+      }
+
+      .page-header{
+        display: grid;
+        place-content: center;
+  
+      }
+
+      .page-header h1{
+        font-size: 2.1rem;
+        font-weight: 800;
+        letter-spacing: -0.2px;
+        color: white;
+        margin-top: -.1rem;
+        margin-bottom: 0.5rem;
+        text-align: center;
+      }
+
+      #title {
+        font-size: 1.2rem;
+        letter-spacing: 2.3px;
+        text-transform: uppercase;
+        background: var(--ig-gradient-full);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center;
+      }
+
+      .page-header p{
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.7);
+        text-align: center;
+      }
+
+
     /*Navigation panel*/
     .nav{
         background: rgba(26, 10, 46, 0.4);
@@ -75,28 +115,78 @@
         color: rgb(255,223,158);
     }
 
-    .container { margin-top: 50px; }
+    .container { 
+      margin-top: 50px;
+      padding: 1rem 5rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      max-width: 1500px;
+    }
     .card {
-      background: white;
-      padding: 20px;
-      margin: 15px;
-      display: inline-block;
-      width: 200px;
-      border-radius: 10px;
-      box-shadow: 0px 0px 10px gray;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1.2px solid rgba(188, 24, 136, 0.25);
+      border-radius: 18px;
+      padding: 1.5rem;
+      color: white;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
     }
     .card p {
-      font-size: 2rem;
-      font-weight: bold;
-      color: #6a0dad;
+        font-size: 1.2rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: white;
+        line-height: 1;
+        margin-top: 0.8rem;
     }
-    button {
+
+    .card h2{
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: white;
+      line-height: 1;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--ig-gradient-full);
+      opacity: 0;
+      transition: opacity 0.2s;
+      }
+
+      .card:hover {
+        background: rgba(255, 255, 255, 0.09);
+        border-color:  rgba(237, 178, 102, 0.5);
+        box-shadow: 0 0 15px rgba(237, 178, 102, 0.2);
+        transform: translateY(-3px);
+      }
+
+      .card:hover::before {
+          opacity: 1;
+      }
+
+      #buttons{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+  
+      button {
       padding: 10px 20px;
       margin-top: 20px;
       margin-left: 8px;
       border: none;
       background: #6a0dad;
       color: white;
+      font-size: 1rem;
       border-radius: 5px;
       cursor: pointer;
     }
@@ -104,13 +194,39 @@
 
     #notifications {
       margin-top: 30px;
-      background: white;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1.2px solid rgba(188, 24, 136, 0.25);
+      border-radius: 18px;
+      padding: 1.5rem;
+      color: white;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
       padding: 15px;
       width: 50%;
       margin-left: auto;
       margin-right: auto;
-      border-radius: 10px;
     }
+
+    #notifications:hover {
+        background: rgba(255, 255, 255, 0.09);
+        border-color:  rgba(237, 178, 102, 0.5);
+        box-shadow: 0 0 15px rgba(237, 178, 102, 0.2);
+        transform: translateY(-3px);
+      }
+    #notif-title{
+      font-size: 1.1rem;
+      letter-spacing: 2.3px;
+      text-transform: uppercase;
+      background: var(--ig-gradient-full);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.1vh;
+    }
+
     .notif-item {
       padding: 6px 0;
       border-bottom: 1px solid #eee;
@@ -126,22 +242,26 @@
   <nav class = "nav">
   <h1 id = "teamName">CTRL-ALT-DEL</h1>
         <ul class="nav-links">
-  <li><a href="/site/about.html">About</a></li>
-  <li><a href="/dashboard.html">Dashboard</a></li>
-  <li><a href="/rewind.html">InstaRewind</a></li>
-  <li><a href="/lookup.html">Lookup</a></li>
-  <li><a href="/site/login.html" onclick="sessionStorage.clear()">Logout</a></li>
-  <li><a href="https://www.instagram.com/">Instagram</a></li>
-</ul>
-        </ul>
+    <li><a href="/site/about.html">About</a></li>
+    <li><a href="/dashboard.html">Dashboard</a></li>
+    <li><a href="/rewind.html">InstaRewind</a></li>
+    <li><a href="/lookup.html">Lookup</a></li>
+    <li><a href="/site/login.html" onclick="sessionStorage.clear()">Logout</a></li>
+    <li><a href="https://www.instagram.com/">Instagram</a></li>
+  </ul>
         
     </nav>
 
-  */
+  
 <div id="loading">Loading dashboard...</div>
 
 <div id="dashboardContent" style="display:none">
-  <h1 style="margin-top:30px">📊 Instagram Engagement Dashboard</h1>
+  <div class = page-header>
+    <h3 id = "title">Notification System</h3>
+    <h1>Engagement Simulation</h1>
+    <p>Notifys when a user follows or unfollows you</p>
+  </div>
+  
 
   <div class="container">
     <div class="card">
@@ -162,14 +282,15 @@
     </div>
   </div>
 
-  */
+  <div id = "buttons">
 
   <button onclick="simulateActivity()">Run Simulation</button>
   <button id="stopBtn" onclick="stopSimulation()" style="display:none; background-color: #d9534f;">Stop Simulation</button>
   <button onclick="goToRewind()">View Rewind</button>
+  </div>
 
   <div id="notifications">
-    <h3>Notifications</h3>
+    <h3 id = "notif-title">Notifications</h3>
     <div id="notifList"><p>No notifications yet.</p></div>
   </div>
 </div>
